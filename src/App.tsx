@@ -9,9 +9,7 @@ function App() {
         <h1 className="text-3xl font-bold text-gray-800 mb-4">
           Welcome to MyBucket
         </h1>
-        <p className="text-gray-600 mb-6">
-          React + TypeScript + TailwindCSS
-        </p>
+        <p className="text-gray-600 mb-6">React + TypeScript + TailwindCSS</p>
         <div className="flex flex-col items-center gap-4">
           <button
             onClick={() => setCount(count => count + 1)}
@@ -20,7 +18,9 @@ function App() {
             Count is {count}
           </button>
           <p className="text-sm text-gray-500">
-            Edit <code className="bg-gray-100 px-2 py-1 rounded">src/App.tsx</code> and save to test HMR
+            Edit{' '}
+            <code className="bg-gray-100 px-2 py-1 rounded">src/App.tsx</code>{' '}
+            and save to test HMR
           </p>
         </div>
       </div>
@@ -29,4 +29,3 @@ function App() {
 }
 
 export default App
-
