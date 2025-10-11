@@ -9,6 +9,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Link } from 'react-router-dom'
 
 const categories = [
   '여행',
@@ -29,13 +30,13 @@ export function Sidebar({ currentPath = '/' }: SidebarProps) {
   const mainNavItems = [
     {
       path: '/empty',
-      label: '비어있는 버킷',
+      label: '미완료 버킷',
       icon: Circle,
       count: 12,
     },
     {
       path: '/filled',
-      label: '채워진 버킷',
+      label: '완료 버킷',
       icon: CheckCircle2,
       count: 8,
     },
@@ -72,9 +73,9 @@ export function Sidebar({ currentPath = '/' }: SidebarProps) {
             const isActive = currentPath === item.path
 
             return (
-              <a
+              <Link
                 key={item.path}
-                href={item.path}
+                to={item.path}
                 className={cn(
                   'flex items-center justify-between w-full px-3 py-2 rounded-md text-sm font-medium transition-colors',
                   isActive
@@ -98,7 +99,7 @@ export function Sidebar({ currentPath = '/' }: SidebarProps) {
                     {item.count}
                   </span>
                 )}
-              </a>
+              </Link>
             )
           })}
         </nav>
@@ -112,9 +113,9 @@ export function Sidebar({ currentPath = '/' }: SidebarProps) {
               const isActive = currentPath === item.path
 
               return (
-                <a
+                <Link
                   key={item.path}
-                  href={item.path}
+                  to={item.path}
                   className={cn(
                     'flex items-center justify-between w-full px-3 py-2 rounded-md text-sm transition-colors',
                     isActive
@@ -131,7 +132,7 @@ export function Sidebar({ currentPath = '/' }: SidebarProps) {
                       {item.count}
                     </span>
                   )}
-                </a>
+                </Link>
               )
             })}
           </div>

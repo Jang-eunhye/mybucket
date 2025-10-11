@@ -10,6 +10,7 @@ import {
   Circle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Link } from 'react-router-dom'
 
 interface HeaderProps {
   currentPath?: string
@@ -41,10 +42,10 @@ export function Header({ currentPath = '/' }: HeaderProps) {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 font-bold text-xl">
+          <Link to="/" className="flex items-center gap-2 font-bold text-xl">
             <Target className="h-6 w-6 text-blue-600" />
             <span>MyBucket</span>
-          </a>
+          </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-6">
@@ -53,9 +54,9 @@ export function Header({ currentPath = '/' }: HeaderProps) {
               const isActive = currentPath === item.path
 
               return (
-                <a
+                <Link
                   key={item.path}
-                  href={item.path}
+                  to={item.path}
                   className={cn(
                     'flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors',
                     isActive
@@ -65,7 +66,7 @@ export function Header({ currentPath = '/' }: HeaderProps) {
                 >
                   <Icon className="h-4 w-4" />
                   {item.label}
-                </a>
+                </Link>
               )
             })}
           </nav>
@@ -83,10 +84,10 @@ export function Header({ currentPath = '/' }: HeaderProps) {
             </div>
 
             <Button asChild size="sm">
-              <a href="/add" className="flex items-center gap-2">
+              <Link to="/add" className="flex items-center gap-2">
                 <Plus className="h-4 w-4" />
                 <span className="hidden sm:inline">새 목표</span>
-              </a>
+              </Link>
             </Button>
           </div>
         </div>
