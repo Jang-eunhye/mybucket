@@ -1,8 +1,20 @@
+/**
+ * Badge 컴포넌트
+ *
+ * 작은 라벨이나 태그를 표시합니다.
+ *
+ * 사용 예시:
+ * <Badge>기본</Badge>
+ * <Badge variant="outline">외곽선</Badge>
+ * <Badge variant="destructive">삭제</Badge>
+ */
+
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 
+// 뱃지 스타일 variants
 const badgeVariants = cva(
   'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
   {

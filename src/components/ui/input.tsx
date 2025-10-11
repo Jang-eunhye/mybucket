@@ -1,3 +1,13 @@
+/**
+ * Input 컴포넌트
+ *
+ * 텍스트 입력 필드입니다.
+ *
+ * 사용 예시:
+ * <Input placeholder="이름을 입력하세요" />
+ * <Input type="email" />
+ */
+
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'

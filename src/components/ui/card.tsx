@@ -1,7 +1,24 @@
+/**
+ * Card 컴포넌트
+ *
+ * 정보를 담는 박스 형태의 컴포넌트입니다.
+ *
+ * 사용 예시:
+ * <Card>
+ *   <CardHeader>
+ *     <CardTitle>제목</CardTitle>
+ *     <CardDescription>설명</CardDescription>
+ *   </CardHeader>
+ *   <CardContent>내용</CardContent>
+ *   <CardFooter>하단 버튼 등</CardFooter>
+ * </Card>
+ */
+
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
+// 카드 기본 컨테이너
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -17,6 +34,7 @@ const Card = React.forwardRef<
 ))
 Card.displayName = 'Card'
 
+// 카드 헤더 (제목, 설명 영역)
 const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -29,6 +47,7 @@ const CardHeader = React.forwardRef<
 ))
 CardHeader.displayName = 'CardHeader'
 
+// 카드 제목
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
@@ -44,6 +63,7 @@ const CardTitle = React.forwardRef<
 ))
 CardTitle.displayName = 'CardTitle'
 
+// 카드 설명 (부제목)
 const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -52,6 +72,7 @@ const CardDescription = React.forwardRef<
 ))
 CardDescription.displayName = 'CardDescription'
 
+// 카드 본문 내용
 const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -60,6 +81,7 @@ const CardContent = React.forwardRef<
 ))
 CardContent.displayName = 'CardContent'
 
+// 카드 하단 (버튼 등)
 const CardFooter = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>

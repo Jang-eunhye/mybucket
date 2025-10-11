@@ -1,3 +1,13 @@
+/**
+ * Textarea 컴포넌트
+ *
+ * 여러 줄의 텍스트를 입력받는 필드입니다.
+ *
+ * 사용 예시:
+ * <Textarea placeholder="내용을 입력하세요" />
+ * <Textarea rows={5} />
+ */
+
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'

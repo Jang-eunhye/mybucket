@@ -1,3 +1,14 @@
+/**
+ * ScrollArea 컴포넌트
+ *
+ * 커스텀 스크롤바가 있는 스크롤 가능한 영역입니다.
+ *
+ * 사용 예시:
+ * <ScrollArea className="h-48">
+ *   <div>긴 내용...</div>
+ * </ScrollArea>
+ */
+
 import * as React from 'react'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 
@@ -21,6 +32,7 @@ const ScrollArea = React.forwardRef<
 ))
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName
 
+// 스크롤바 (세로 또는 가로)
 const ScrollBar = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
