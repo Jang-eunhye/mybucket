@@ -6,6 +6,7 @@
  */
 
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/layout/Header'
 import { BucketCard } from '../components/common/BucketCard'
 import { Plus } from 'lucide-react'
@@ -57,6 +58,7 @@ type FilterType = 'all' | 'incomplete' | 'complete'
 
 export function Home() {
   const [filter, setFilter] = useState<FilterType>('all')
+  const navigate = useNavigate()
 
   // 필터링된 버킷리스트
   const filteredBuckets = allBuckets
@@ -144,6 +146,7 @@ export function Home() {
                 title={bucket.title}
                 completed={bucket.completed}
                 completedAt={bucket.completed ? bucket.completedAt : undefined}
+                onClick={() => navigate(`/bucket/${bucket.id}`)}
               />
             ))
           )}
@@ -151,12 +154,12 @@ export function Home() {
       </main>
 
       {/* 우측 하단 FAB (추가 버튼) */}
-      <a
-        href="/add"
+      <button
+        onClick={() => navigate('/add')}
         className="fixed right-4 bottom-4 w-14 h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
       >
         <Plus className="h-6 w-6" />
-      </a>
+      </button>
     </div>
   )
 }
