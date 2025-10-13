@@ -1,172 +1,162 @@
+/**
+ * Home 페이지 - 모바일 중심 UI
+ *
+ * 전체 버킷리스트 표시 (미완료 + 완료)
+ * 필터링: 전체, 미완료, 완료
+ */
+
+import { useState } from 'react'
 import { Header } from '../components/layout/Header'
-import { Sidebar } from '../components/layout/Sidebar'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../components/ui/card'
-import { Progress } from '../components/ui/progress'
-import {
-  Circle,
-  CheckCircle2,
-  BarChart3,
-  Plus,
-  Target,
-  TrendingUp,
-} from 'lucide-react'
+import { BucketCard } from '../components/common/BucketCard'
+import { Plus } from 'lucide-react'
+
+// Mock 데이터 (미완료 + 완료)
+const allBuckets = [
+  {
+    id: 1,
+    title: '마라톤 완주하기',
+    completed: false,
+    updatedAt: '2024-03-15',
+  },
+  {
+    id: 2,
+    title: '첫 해외여행 가기',
+    completed: true,
+    completedAt: '2024-08-15',
+    updatedAt: '2024-08-15',
+  },
+  {
+    id: 3,
+    title: '일본 여행 가기',
+    completed: false,
+    updatedAt: '2024-03-10',
+  },
+  {
+    id: 4,
+    title: '10km 달리기 완주',
+    completed: true,
+    completedAt: '2024-07-20',
+    updatedAt: '2024-07-20',
+  },
+  {
+    id: 5,
+    title: '새로운 언어 배우기',
+    completed: false,
+    updatedAt: '2024-03-05',
+  },
+  {
+    id: 6,
+    title: '요리 클래스 수강하기',
+    completed: true,
+    completedAt: '2024-06-10',
+    updatedAt: '2024-06-10',
+  },
+]
+
+type FilterType = 'all' | 'incomplete' | 'complete'
 
 export function Home() {
+  const [filter, setFilter] = useState<FilterType>('all')
+
+  // 필터링된 버킷리스트
+  const filteredBuckets = allBuckets
+    .filter(bucket => {
+      if (filter === 'incomplete') return !bucket.completed
+      if (filter === 'complete') return bucket.completed
+      return true // 'all'
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    )
+
+  // 통계
+  const totalCount = allBuckets.length
+  const incompleteCount = allBuckets.filter(b => !b.completed).length
+  const completeCount = allBuckets.filter(b => b.completed).length
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPath="/" />
+      <Header />
 
-      <div className="flex">
-        <Sidebar currentPath="/" />
+      <main className="pb-20">
+        {/* 필터 버튼 (통계 포함) */}
+        <div className="bg-white px-4 py-3 flex gap-2 border-b border-gray-200">
+          <button
+            onClick={() => setFilter('all')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              filter === 'all'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <span>전체</span>
+            <span
+              className={`${filter === 'all' ? 'text-white' : 'text-gray-900'} font-semibold`}
+            >
+              {totalCount}
+            </span>
+          </button>
+          <button
+            onClick={() => setFilter('incomplete')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              filter === 'incomplete'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <span>미완료</span>
+            <span
+              className={`${filter === 'incomplete' ? 'text-white' : 'text-gray-900'} font-semibold`}
+            >
+              {incompleteCount}
+            </span>
+          </button>
+          <button
+            onClick={() => setFilter('complete')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              filter === 'complete'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <span>완료</span>
+            <span
+              className={`${filter === 'complete' ? 'text-white' : 'text-green-600'} font-semibold`}
+            >
+              {completeCount}
+            </span>
+          </button>
+        </div>
 
-        <main className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
-            {/* Welcome Section */}
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold mb-2">
-                안녕하세요! 오늘도 목표를 향해 나아가볼까요?
-              </h1>
-              <p className="text-gray-600">
-                나만의 버킷리스트를 관리하고 인생 목표를 달성해보세요.
-              </p>
+        {/* 버킷리스트 카드 */}
+        <div className="p-4 space-y-3">
+          {filteredBuckets.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              {filter === 'incomplete' && '미완료 목표가 없습니다'}
+              {filter === 'complete' && '완료한 목표가 없습니다'}
+              {filter === 'all' && '버킷리스트가 없습니다'}
             </div>
+          ) : (
+            filteredBuckets.map(bucket => (
+              <BucketCard
+                key={bucket.id}
+                title={bucket.title}
+                completed={bucket.completed}
+                completedAt={bucket.completed ? bucket.completedAt : undefined}
+              />
+            ))
+          )}
+        </div>
+      </main>
 
-            {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    전체 목표
-                  </CardTitle>
-                  <Target className="h-4 w-4 text-gray-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">20</div>
-                  <p className="text-xs text-gray-600">완료 8개, 진행중 12개</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">달성률</CardTitle>
-                  <TrendingUp className="h-4 w-4 text-gray-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">40%</div>
-                  <Progress value={40} className="mt-2" />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    이번 달 완료
-                  </CardTitle>
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">3</div>
-                  <p className="text-xs text-gray-600">지난 달보다 +1개</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <Card className="hover:bg-gray-100 transition-colors cursor-pointer">
-                <a href="/empty">
-                  <CardContent className="flex flex-col items-center justify-center p-6">
-                    <Circle className="h-8 w-8 text-gray-500 mb-2" />
-                    <h3 className="font-medium">비어있는 버킷</h3>
-                    <p className="text-sm text-gray-600 text-center">
-                      아직 완료하지 않은 목표들
-                    </p>
-                  </CardContent>
-                </a>
-              </Card>
-
-              <Card className="hover:bg-gray-100 transition-colors cursor-pointer">
-                <a href="/filled">
-                  <CardContent className="flex flex-col items-center justify-center p-6">
-                    <CheckCircle2 className="h-8 w-8 text-green-600 mb-2" />
-                    <h3 className="font-medium">채워진 버킷</h3>
-                    <p className="text-sm text-gray-600 text-center">
-                      완료한 목표들
-                    </p>
-                  </CardContent>
-                </a>
-              </Card>
-
-              <Card className="hover:bg-gray-100 transition-colors cursor-pointer">
-                <a href="/stats">
-                  <CardContent className="flex flex-col items-center justify-center p-6">
-                    <BarChart3 className="h-8 w-8 text-blue-600 mb-2" />
-                    <h3 className="font-medium">통계</h3>
-                    <p className="text-sm text-gray-600 text-center">
-                      달성률과 통계 확인
-                    </p>
-                  </CardContent>
-                </a>
-              </Card>
-
-              <Card className="hover:bg-gray-100 transition-colors cursor-pointer">
-                <a href="/add">
-                  <CardContent className="flex flex-col items-center justify-center p-6">
-                    <Plus className="h-8 w-8 text-yellow-600 mb-2" />
-                    <h3 className="font-medium">새 목표 추가</h3>
-                    <p className="text-sm text-gray-600 text-center">
-                      새로운 버킷리스트 만들기
-                    </p>
-                  </CardContent>
-                </a>
-              </Card>
-            </div>
-
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle>최근 활동</CardTitle>
-                <CardDescription>
-                  최근에 추가하거나 완료한 목표들을 확인해보세요.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100">
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    <div className="flex-1">
-                      <p className="font-medium">마라톤 완주하기</p>
-                      <p className="text-sm text-gray-600">3일 전 완료</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100">
-                    <Plus className="h-5 w-5 text-yellow-600" />
-                    <div className="flex-1">
-                      <p className="font-medium">일본 여행 가기</p>
-                      <p className="text-sm text-gray-600">1주일 전 추가</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100">
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    <div className="flex-1">
-                      <p className="font-medium">새로운 언어 배우기</p>
-                      <p className="text-sm text-gray-600">2주일 전 완료</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
-      </div>
+      {/* 우측 하단 FAB (추가 버튼) */}
+      <a
+        href="/add"
+        className="fixed right-4 bottom-4 w-14 h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
+      >
+        <Plus className="h-6 w-6" />
+      </a>
     </div>
   )
 }
