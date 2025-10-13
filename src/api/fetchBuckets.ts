@@ -1,0 +1,46 @@
+import { BucketType } from '@/types/bucket'
+import { supabase } from '../lib/supabase'
+
+export async function getAllBuckets() {
+  const { data, error } = await supabase
+    .from('buckets')
+    .select('*')
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return data
+}
+
+export async function getBucketById(id: string) {
+  const { data, error } = await supabase
+    .from('buckets')
+    .select('*')
+    .eq('id', id)
+  if (error) throw error
+  return data
+}
+
+export async function createBucket(bucket: BucketType) {
+  const { data, error } = await supabase
+    .from('buckets')
+    .insert(bucket)
+    .select()
+  if (error) throw error
+  return data
+}
+
+export async function updateBucket(updatedBucket: BucketType) {
+  const { data, error } = await supabase
+    .from('buckets')
+    .update(updatedBucket)
+    .select()
+  if (error) throw error
+  return data
+}
+
+export async function deleteBucket(id: string) {
+  const { error } = await supabase
+    .from('buckets')
+    .delete()
+    .eq('id', id)
+  if (error) throw error
+}

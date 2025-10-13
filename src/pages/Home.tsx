@@ -5,77 +5,57 @@
  * 필터링: 전체, 미완료, 완료
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/layout/Header'
 import { BucketCard } from '../components/common/BucketCard'
 import { Plus } from 'lucide-react'
-
-// Mock 데이터 (미완료 + 완료)
-const allBuckets = [
-  {
-    id: 1,
-    title: '마라톤 완주하기',
-    completed: false,
-    updatedAt: '2024-03-15',
-  },
-  {
-    id: 2,
-    title: '첫 해외여행 가기',
-    completed: true,
-    completedAt: '2024-08-15',
-    updatedAt: '2024-08-15',
-  },
-  {
-    id: 3,
-    title: '일본 여행 가기',
-    completed: false,
-    updatedAt: '2024-03-10',
-  },
-  {
-    id: 4,
-    title: '10km 달리기 완주',
-    completed: true,
-    completedAt: '2024-07-20',
-    updatedAt: '2024-07-20',
-  },
-  {
-    id: 5,
-    title: '새로운 언어 배우기',
-    completed: false,
-    updatedAt: '2024-03-05',
-  },
-  {
-    id: 6,
-    title: '요리 클래스 수강하기',
-    completed: true,
-    completedAt: '2024-06-10',
-    updatedAt: '2024-06-10',
-  },
-]
+import { getAllBuckets } from '@/api/fetchBuckets'
+import { BucketType } from '@/types/bucket'
 
 type FilterType = 'all' | 'incomplete' | 'complete'
 
 export function Home() {
   const [filter, setFilter] = useState<FilterType>('all')
+  const [buckets, setBuckets] = useState<BucketType[]>([])
   const navigate = useNavigate()
 
+  // 데이터 로딩
+  useEffect(() => {
+    async function loadBuckets() {
+      const data = await getAllBuckets()
+      setBuckets(data || [])
+    }
+    loadBuckets()
+  }, [])
+
   // 필터링된 버킷리스트
-  const filteredBuckets = allBuckets
+  const filteredBuckets = buckets
     .filter(bucket => {
-      if (filter === 'incomplete') return !bucket.completed
-      if (filter === 'complete') return bucket.completed
+      if (filter === 'incomplete') return !bucket.is_completed
+      if (filter === 'complete') return bucket.is_completed
       return true // 'all'
     })
-    .sort(
-      (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-    )
+    .sort((a, b) => {
+      const aDate = new Date(a.updated_at || a.created_at).getTime()
+      const bDate = new Date(b.updated_at || b.created_at).getTime()
+      return bDate - aDate
+    })
 
   // 통계
-  const totalCount = allBuckets.length
-  const incompleteCount = allBuckets.filter(b => !b.completed).length
-  const completeCount = allBuckets.filter(b => b.completed).length
+  const totalCount = buckets.length
+  const incompleteCount = buckets.filter(b => !b.is_completed).length
+  const completeCount = buckets.filter(b => b.is_completed).length
+
+  // // 로딩 중
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-gray-50">
+  //       <Header />
+  //       <div className="p-4 text-center py-12 text-gray-500">로딩 중...</div>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -144,8 +124,10 @@ export function Home() {
               <BucketCard
                 key={bucket.id}
                 title={bucket.title}
-                completed={bucket.completed}
-                completedAt={bucket.completed ? bucket.completedAt : undefined}
+                completed={bucket.is_completed}
+                completedAt={
+                  bucket.is_completed ? bucket.completed_at : undefined
+                }
                 onClick={() => navigate(`/bucket/${bucket.id}`)}
               />
             ))
