@@ -17,9 +17,7 @@ export function Add() {
   })
 
   // 등록 버튼 클릭 시 실행되는 함수
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const handleSubmit = () => {
     // 제목이 비어있으면 경고
     if (!formData.title.trim()) {
       alert('제목을 입력해주세요!')
@@ -29,10 +27,7 @@ export function Add() {
     // 여기에 나중에 API 호출 또는 상태 저장 로직 추가
     console.log('새 버킷리스트 등록:', formData)
 
-    async function addBuckets() {
-      await createBucket(formData as CreateBucketType)
-    }
-    addBuckets()
+    createBucket(formData as CreateBucketType)
 
     // 등록 후 홈으로 이동
     alert('목표가 등록되었습니다!')

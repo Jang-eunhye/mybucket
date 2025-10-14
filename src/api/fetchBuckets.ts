@@ -32,6 +32,7 @@ export async function updateBucket(updatedBucket: BucketType) {
   const { data, error } = await supabase
     .from('buckets')
     .update(updatedBucket)
+    .eq('id', updatedBucket.id)
     .select()
   if (error) throw error
   return data
