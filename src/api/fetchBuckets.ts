@@ -1,4 +1,4 @@
-import { BucketType } from '@/types/bucket'
+import { BucketType, CreateBucketType } from '@/types/bucket'
 import { supabase } from '../lib/supabase'
 
 export async function getAllBuckets() {
@@ -19,7 +19,7 @@ export async function getBucketById(id: string) {
   return data
 }
 
-export async function createBucket(bucket: BucketType) {
+export async function createBucket(bucket: CreateBucketType) {
   const { data, error } = await supabase
     .from('buckets')
     .insert(bucket)

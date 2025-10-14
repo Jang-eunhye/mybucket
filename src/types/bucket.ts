@@ -1,7 +1,7 @@
 export type BucketType = {
   id: string
   title: string
-  description?: string
+  description: string
   is_completed: boolean
   created_at: string
   updated_at?: string
@@ -13,3 +13,5 @@ export type BucketType = {
   complete_count?: number
   user_id?: string
 }
+
+export type CreateBucketType = Omit<BucketType, 'id' | 'created_at' | 'is_completed'>

@@ -6,15 +6,14 @@ import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Label } from '../components/ui/label'
 import { Textarea } from '../components/ui/textarea'
+import { createBucket } from '@/api/fetchBuckets'
+import { CreateBucketType } from '@/types/bucket'
 
 export function Add() {
   const navigate = useNavigate()
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreateBucketType>({
     title: '',
     description: '',
-    category: '',
-    priority: 'medium',
-    deadline: '',
   })
 
   // 등록 버튼 클릭 시 실행되는 함수
@@ -23,12 +22,17 @@ export function Add() {
 
     // 제목이 비어있으면 경고
     if (!formData.title.trim()) {
-      alert('목표 제목을 입력해주세요!')
+      alert('제목을 입력해주세요!')
       return
     }
 
     // 여기에 나중에 API 호출 또는 상태 저장 로직 추가
     console.log('새 버킷리스트 등록:', formData)
+
+    async function addBuckets() {
+      await createBucket(formData as CreateBucketType)
+    }
+    addBuckets()
 
     // 등록 후 홈으로 이동
     alert('목표가 등록되었습니다!')
