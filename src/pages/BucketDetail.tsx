@@ -19,26 +19,23 @@ import { deleteBucket, getBucketById, updateBucket } from '@/api/fetchBuckets'
 export function BucketDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [bucket, setBucketDetail] = useState<BucketType>(
-    {
-      id: '',
-      title: '',
-      description: '',
-      is_completed: false,
-      created_at: '',
-    }
-  )
+  const [bucket, setBucketDetail] = useState<BucketType>({
+    id: '',
+    title: '',
+    description: '',
+    is_completed: false,
+    created_at: '',
+  })
   const [isEditing, setIsEditing] = useState(false)
 
-   // 데이터 로딩
+  // 데이터 로딩
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const data = await getBucketById(id as string)
       setBucketDetail(data[0])
       setFormData(data[0])
     })()
   }, [])
-  
 
   const [formData, setFormData] = useState<BucketType>({
     id: bucket.id || '',
@@ -47,7 +44,6 @@ export function BucketDetail() {
     description: bucket.description || '',
     is_completed: bucket.is_completed || false,
   })
-
 
   if (!bucket) {
     return (
@@ -194,23 +190,24 @@ export function BucketDetail() {
                     <Button
                       onClick={handleToggleComplete}
                       variant={bucket.is_completed ? 'secondary' : 'default'}
-                      className="flex-1"
+                      className="flex-1 text-base font-bold"
                     >
                       {bucket.is_completed ? (
                         <>
-                          <Circle className="h-4 w-4 mr-2" />
+                          <Circle className="h-6 w-6 mr-2" />
                           미완료로 변경
                         </>
                       ) : (
                         <>
-                          <CheckCircle2 className="h-4 w-4 mr-2" />
-                          완료 표시
+                          <CheckCircle2 className="h-6 w-6 mr-2" />
+                          완료 하기
                         </>
                       )}
                     </Button>
                     <Button
                       variant="outline"
                       onClick={() => setIsEditing(true)}
+                      className="text-base font-bold"
                     >
                       수정
                     </Button>
