@@ -25,6 +25,7 @@ export function BucketDetail() {
     description: '',
     is_completed: false,
     created_at: '',
+    complete_note: '',
   })
   const [isEditing, setIsEditing] = useState(false)
 
@@ -43,6 +44,7 @@ export function BucketDetail() {
     title: bucket.title || '',
     description: bucket.description || '',
     is_completed: bucket.is_completed || false,
+    complete_note: bucket.complete_note || '',
   })
 
   if (!bucket) {
@@ -147,6 +149,28 @@ export function BucketDetail() {
                       className="min-h-32"
                     />
                   </div>
+                  {formData.is_completed && (
+                    <section>
+                      <div>
+                        <Label
+                          htmlFor="complete_note"
+                          className="text-base font-medium"
+                        >
+                          완료 메모
+                        </Label>
+                        <Textarea
+                          id="complete_note"
+                          value={formData.complete_note}
+                          onChange={e =>
+                            setFormData({
+                              ...formData,
+                              complete_note: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </section>
+                  )}
 
                   {/* 버튼 */}
                   <div className="flex gap-3 pt-4">
@@ -163,6 +187,7 @@ export function BucketDetail() {
                           title: bucket.title,
                           description: bucket.description,
                           is_completed: bucket.is_completed,
+                          complete_note: bucket.complete_note,
                         })
                         setIsEditing(false)
                       }}
@@ -174,25 +199,48 @@ export function BucketDetail() {
               ) : (
                 // 보기 모드
                 <div className="space-y-6">
-                  <div>
-                    <h1 className="text-2xl font-bold mb-4">{bucket.title}</h1>
+                  <section>
+                    <div className="flex items-center gap-3 mb-4">
+                      {bucket.is_completed && (
+                        <div className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm font-medium">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          완료
+                        </div>
+                      )}
+                      <h1 className="text-2xl font-bold">{bucket.title}</h1>
+                    </div>
                     <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                       {bucket.description || '설명이 없습니다.'}
                     </p>
-                  </div>
+                  </section>
 
                   {/* 메타 정보 */}
-                  <div className="pt-4 border-t space-y-2 text-sm text-gray-600">
+                  <section className="pt-4 border-t space-y-2 text-sm text-gray-600">
                     <div>생성일: {bucket.created_at}</div>
                     {bucket.is_completed && bucket.completed_at && (
                       <div className="text-green-600 font-medium">
                         완료일: {bucket.completed_at}
                       </div>
                     )}
-                  </div>
+                  </section>
 
-                  {/* 버튼 */}
-                  <div className="flex gap-3 pt-4">
+                  {/* 완료 섹션 */}
+                  {bucket.is_completed && (
+                    <section>
+                      <Label
+                        htmlFor="complete_note"
+                        className="text-base font-medium"
+                      >
+                        완료 메모
+                      </Label>
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                        {bucket.complete_note}
+                      </p>
+                    </section>
+                  )}
+
+                  {/* 버튼 섹션 */}
+                  <section className="flex gap-3 pt-4">
                     <Button
                       onClick={handleToggleComplete}
                       variant={bucket.is_completed ? 'secondary' : 'default'}
@@ -217,7 +265,7 @@ export function BucketDetail() {
                     >
                       수정
                     </Button>
-                  </div>
+                  </section>
                 </div>
               )}
             </CardContent>
