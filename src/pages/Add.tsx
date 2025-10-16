@@ -14,6 +14,7 @@ export function Add() {
   const [formData, setFormData] = useState<CreateBucketType>({
     title: '',
     description: '',
+    // is_completed: false,
   })
 
   // 등록 버튼 클릭 시 실행되는 함수

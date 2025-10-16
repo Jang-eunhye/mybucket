@@ -75,12 +75,19 @@ export function BucketDetail() {
     navigate('/')
   }
 
-  // 완료/미완료 토글
+  // 완료/미완료 버튼
   const handleToggleComplete = () => {
-    const newCompleted = !formData.is_completed
-    setFormData({ ...formData, is_completed: newCompleted })
-    // 여기에 나중에 API 호출
-    console.log('완료 상태 변경:', newCompleted)
+    const updatedFormData = {
+      ...formData,
+      is_completed: !formData.is_completed,
+    }
+
+    setFormData(updatedFormData)
+    setBucketDetail(updatedFormData)
+
+    console.log('완료 상태가 변경되었습니다!', updatedFormData)
+    updateBucket(updatedFormData as BucketType)
+    alert('완료 상태가 변경되었습니다!')
   }
 
   return (
@@ -167,9 +174,7 @@ export function BucketDetail() {
                 // 보기 모드
                 <div className="space-y-6">
                   <div>
-                    <h1 className="text-2xl font-bold mb-4">
-                      {bucket.title}
-                    </h1>
+                    <h1 className="text-2xl font-bold mb-4">{bucket.title}</h1>
                     <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                       {bucket.description || '설명이 없습니다.'}
                     </p>
