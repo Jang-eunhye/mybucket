@@ -80,6 +80,7 @@ export function BucketDetail() {
     const updatedFormData = {
       ...formData,
       is_completed: !formData.is_completed,
+      completed_at: new Date().toISOString(),
     }
 
     setFormData(updatedFormData)
