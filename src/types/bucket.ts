@@ -7,7 +7,7 @@ export type BucketType = {
   updated_at?: string
   completed_at?: string
   complete_note?: string
-  complete_image?: string[]
+  complete_images?: (string | File)[]
   category?: string
   due_date?: string
   complete_count?: number

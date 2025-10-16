@@ -26,6 +26,7 @@ export function BucketDetail() {
     is_completed: false,
     created_at: '',
     complete_note: '',
+    complete_images: [],
   })
   const [isEditing, setIsEditing] = useState(false)
 
@@ -35,6 +36,7 @@ export function BucketDetail() {
       const data = await getBucketById(id as string)
       setBucketDetail(data[0])
       setFormData(data[0])
+      console.log(data[0])
     })()
   }, [])
 
@@ -45,6 +47,7 @@ export function BucketDetail() {
     description: bucket.description || '',
     is_completed: bucket.is_completed || false,
     complete_note: bucket.complete_note || '',
+    complete_images: bucket.complete_images || [],
   })
 
   if (!bucket) {
@@ -62,7 +65,7 @@ export function BucketDetail() {
   const handleSave = () => {
     console.log('수정된 데이터:', formData)
     updateBucket(formData as BucketType)
-    setBucketDetail(formData)
+    setBucketDetail(formData as BucketType)
     alert('수정되었습니다!')
     setIsEditing(false)
   }
@@ -169,6 +172,69 @@ export function BucketDetail() {
                           }
                         />
                       </div>
+                      {/* 완료이미지 */}
+                      <div>
+                        <Label
+                          htmlFor="complete_image"
+                          className="text-base font-medium"
+                        >
+                          완료 이미지
+                        </Label>
+                        <div className="flex gap-3 overflow-x-auto h-40">
+                          {formData.complete_images?.map((image, index) => (
+                            <div key={index} className="flex-shrink-0 relative">
+                              <img
+                                src={image instanceof File ? URL.createObjectURL(image) : image}
+                                alt="완료 이미지"
+                                className="w-full h-full object-cover"
+                              />
+                              <Button
+                                type="button"
+                                onClick={() => {
+                                  const newImages =
+                                    formData.complete_images?.filter(
+                                      (_, i) => i !== index
+                                    )
+                                  setFormData({
+                                    ...formData,
+                                    complete_images: newImages,
+                                  })
+                                }}
+                                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600"
+                              >
+                                ×
+                              </Button>
+                            </div>
+                          ))}
+                          {/* 플러스 버튼 */}
+                          <div className="flex-shrink-0">
+                            <label
+                              htmlFor="image-upload"
+                              className="cursor-pointer"
+                            >
+                              <div className="w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center hover:border-gray-400 transition-colors">
+                                <span className="text-2xl text-gray-400">
+                                  +
+                                </span>
+                              </div>
+                              <input
+                                id="image-upload"
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                className="hidden"
+                                onChange={e => {
+                                  const files = Array.from(e.target.files || [])
+                                  setFormData({
+                                    ...formData,
+                                    complete_images: [...(formData.complete_images || []), ...files],
+                                  })
+                                }}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                     </section>
                   )}
 
@@ -188,6 +254,7 @@ export function BucketDetail() {
                           description: bucket.description,
                           is_completed: bucket.is_completed,
                           complete_note: bucket.complete_note,
+                          complete_images: bucket.complete_images,
                         })
                         setIsEditing(false)
                       }}
@@ -236,6 +303,17 @@ export function BucketDetail() {
                       <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                         {bucket.complete_note}
                       </p>
+                      <div className="flex gap-3 overflow-x-auto h-40">
+                          {formData.complete_images?.map((image, index) => (
+                            <div key={index} className="flex-shrink-0 relative">
+                              <img
+                                src={image instanceof File ? URL.createObjectURL(image) : image}
+                                alt="완료 이미지"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
                     </section>
                   )}
 
